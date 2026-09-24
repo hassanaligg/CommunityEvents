@@ -1,0 +1,245 @@
+[
+  {
+    "id": "event-1",
+    "title": "Sunset sessions in the park",
+    "category": "Music",
+    "date": "2026-10-01T14:00:00Z",
+    "endDate": "2026-10-01T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Creek Park, Dubai",
+    "attendeeCount": 48,
+    "hostId": "maya",
+    "hostName": "Maya Chen",
+    "imageUrl": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
+    "description": "Sunset sessions in the park brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Creek Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "maya",
+      "name": "Maya Chen",
+      "bio": "Making room for music, good food, and new friendships in our city.",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  },
+  {
+    "id": "event-2",
+    "title": "A good morning run",
+    "category": "Sports",
+    "date": "2026-10-02T14:00:00Z",
+    "endDate": "2026-10-02T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Kite Beach, Dubai",
+    "attendeeCount": 16,
+    "hostId": "alex",
+    "hostName": "Alex Morgan",
+    "imageUrl": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80",
+    "description": "A good morning run brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Kite Beach, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "alex",
+      "name": "Alex Morgan",
+      "bio": "Runner, maker, and believer in learning something new together.",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  },
+  {
+    "id": "event-3",
+    "title": "Build something together",
+    "category": "Tech",
+    "date": "2026-10-03T14:00:00Z",
+    "endDate": "2026-10-03T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Alserkal Avenue, Dubai",
+    "attendeeCount": 124,
+    "hostId": "alex",
+    "hostName": "Alex Morgan",
+    "imageUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80",
+    "description": "Build something together brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Alserkal Avenue, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "alex",
+      "name": "Alex Morgan",
+      "bio": "Runner, maker, and believer in learning something new together.",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  },
+  {
+    "id": "event-4",
+    "title": "Around the table",
+    "category": "Food",
+    "date": "2026-10-04T14:00:00Z",
+    "endDate": "2026-10-04T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Al Fahidi, Dubai",
+    "attendeeCount": 24,
+    "hostId": "maya",
+    "hostName": "Maya Chen",
+    "imageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80",
+    "description": "Around the table brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Al Fahidi, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "maya",
+      "name": "Maya Chen",
+      "bio": "Making room for music, good food, and new friendships in our city.",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  },
+  {
+    "id": "event-5",
+    "title": "The neighbourhood book exchange",
+    "category": "Other",
+    "date": "2026-10-05T14:00:00Z",
+    "endDate": "2026-10-05T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Jumeirah Library, Dubai",
+    "attendeeCount": 0,
+    "hostId": "maya",
+    "hostName": "Maya Chen",
+    "imageUrl": "",
+    "description": "The neighbourhood book exchange brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Jumeirah Library, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "maya",
+      "name": "Maya Chen",
+      "bio": "Making room for music, good food, and new friendships in our city.",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": []
+  },
+  {
+    "id": "event-6",
+    "title": "Jazz under the stars",
+    "category": "Music",
+    "date": "2026-10-06T14:00:00Z",
+    "endDate": "2026-10-06T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Zabeel Park, Dubai",
+    "attendeeCount": 210,
+    "hostId": "maya",
+    "hostName": "Maya Chen",
+    "imageUrl": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80",
+    "description": "Jazz under the stars brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Zabeel Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "maya",
+      "name": "Maya Chen",
+      "bio": "Making room for music, good food, and new friendships in our city.",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  },
+  {
+    "id": "event-7",
+    "title": "Our first community picnic",
+    "category": "Other",
+    "date": "2026-09-20T14:00:00Z",
+    "endDate": "2026-09-20T16:00:00Z",
+    "timeZone": "Asia/Dubai",
+    "location": "Safa Park, Dubai",
+    "attendeeCount": 32,
+    "hostId": "alex",
+    "hostName": "Alex Morgan",
+    "imageUrl": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
+    "description": "Our first community picnic brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Safa Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+    "host": {
+      "id": "alex",
+      "name": "Alex Morgan",
+      "bio": "Runner, maker, and believer in learning something new together.",
+      "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+    },
+    "attendeePreview": [
+      {
+        "id": "sam",
+        "name": "Sam Lee",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "noor",
+        "name": "Noor Ali",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+      },
+      {
+        "id": "leo",
+        "name": "Leo Park",
+        "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+      }
+    ]
+  }
+]

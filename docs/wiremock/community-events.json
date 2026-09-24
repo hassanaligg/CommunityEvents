@@ -1,0 +1,825 @@
+{
+  "mappings": [
+    {
+      "id": "d2de9439-6ac2-5acd-9a34-cd02a161f7fa",
+      "name": "List events",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": [
+          {
+            "id": "event-1",
+            "title": "Sunset sessions in the park",
+            "category": "Music",
+            "date": "2026-10-01T14:00:00Z",
+            "endDate": "2026-10-01T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Creek Park, Dubai",
+            "attendeeCount": 48,
+            "hostId": "maya",
+            "hostName": "Maya Chen",
+            "imageUrl": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80"
+          },
+          {
+            "id": "event-2",
+            "title": "A good morning run",
+            "category": "Sports",
+            "date": "2026-10-02T14:00:00Z",
+            "endDate": "2026-10-02T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Kite Beach, Dubai",
+            "attendeeCount": 16,
+            "hostId": "alex",
+            "hostName": "Alex Morgan",
+            "imageUrl": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80"
+          },
+          {
+            "id": "event-3",
+            "title": "Build something together",
+            "category": "Tech",
+            "date": "2026-10-03T14:00:00Z",
+            "endDate": "2026-10-03T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Alserkal Avenue, Dubai",
+            "attendeeCount": 124,
+            "hostId": "alex",
+            "hostName": "Alex Morgan",
+            "imageUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80"
+          },
+          {
+            "id": "event-4",
+            "title": "Around the table",
+            "category": "Food",
+            "date": "2026-10-04T14:00:00Z",
+            "endDate": "2026-10-04T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Al Fahidi, Dubai",
+            "attendeeCount": 24,
+            "hostId": "maya",
+            "hostName": "Maya Chen",
+            "imageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80"
+          },
+          {
+            "id": "event-5",
+            "title": "The neighbourhood book exchange",
+            "category": "Other",
+            "date": "2026-10-05T14:00:00Z",
+            "endDate": "2026-10-05T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Jumeirah Library, Dubai",
+            "attendeeCount": 0,
+            "hostId": "maya",
+            "hostName": "Maya Chen",
+            "imageUrl": ""
+          },
+          {
+            "id": "event-6",
+            "title": "Jazz under the stars",
+            "category": "Music",
+            "date": "2026-10-06T14:00:00Z",
+            "endDate": "2026-10-06T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Zabeel Park, Dubai",
+            "attendeeCount": 210,
+            "hostId": "maya",
+            "hostName": "Maya Chen",
+            "imageUrl": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80"
+          },
+          {
+            "id": "event-7",
+            "title": "Our first community picnic",
+            "category": "Other",
+            "date": "2026-09-20T14:00:00Z",
+            "endDate": "2026-09-20T16:00:00Z",
+            "timeZone": "Asia/Dubai",
+            "location": "Safa Park, Dubai",
+            "attendeeCount": 32,
+            "hostId": "alex",
+            "hostName": "Alex Morgan",
+            "imageUrl": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80"
+          }
+        ]
+      }
+    },
+    {
+      "id": "7f2cea7f-4220-5e8d-a074-26cbf7146423",
+      "name": "Get event-1",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-1"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-1",
+          "title": "Sunset sessions in the park",
+          "category": "Music",
+          "date": "2026-10-01T14:00:00Z",
+          "endDate": "2026-10-01T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Creek Park, Dubai",
+          "attendeeCount": 48,
+          "hostId": "maya",
+          "hostName": "Maya Chen",
+          "imageUrl": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
+          "description": "Sunset sessions in the park brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Creek Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "maya",
+            "name": "Maya Chen",
+            "bio": "Making room for music, good food, and new friendships in our city.",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9ded5651-cac3-5aa8-b077-e346cb5660bc",
+      "name": "Get event-2",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-2"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-2",
+          "title": "A good morning run",
+          "category": "Sports",
+          "date": "2026-10-02T14:00:00Z",
+          "endDate": "2026-10-02T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Kite Beach, Dubai",
+          "attendeeCount": 16,
+          "hostId": "alex",
+          "hostName": "Alex Morgan",
+          "imageUrl": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80",
+          "description": "A good morning run brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Kite Beach, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "alex",
+            "name": "Alex Morgan",
+            "bio": "Runner, maker, and believer in learning something new together.",
+            "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "59b05bcb-c4af-5887-a053-9738fc6986fc",
+      "name": "Get event-3",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-3"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-3",
+          "title": "Build something together",
+          "category": "Tech",
+          "date": "2026-10-03T14:00:00Z",
+          "endDate": "2026-10-03T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Alserkal Avenue, Dubai",
+          "attendeeCount": 124,
+          "hostId": "alex",
+          "hostName": "Alex Morgan",
+          "imageUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80",
+          "description": "Build something together brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Alserkal Avenue, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "alex",
+            "name": "Alex Morgan",
+            "bio": "Runner, maker, and believer in learning something new together.",
+            "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ab9c4da8-8bce-51eb-acc2-a923dd712f71",
+      "name": "Get event-4",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-4"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-4",
+          "title": "Around the table",
+          "category": "Food",
+          "date": "2026-10-04T14:00:00Z",
+          "endDate": "2026-10-04T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Al Fahidi, Dubai",
+          "attendeeCount": 24,
+          "hostId": "maya",
+          "hostName": "Maya Chen",
+          "imageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80",
+          "description": "Around the table brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Al Fahidi, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "maya",
+            "name": "Maya Chen",
+            "bio": "Making room for music, good food, and new friendships in our city.",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "215544b9-8611-5d6b-910b-783cf335dffa",
+      "name": "Get event-5",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-5"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-5",
+          "title": "The neighbourhood book exchange",
+          "category": "Other",
+          "date": "2026-10-05T14:00:00Z",
+          "endDate": "2026-10-05T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Jumeirah Library, Dubai",
+          "attendeeCount": 0,
+          "hostId": "maya",
+          "hostName": "Maya Chen",
+          "imageUrl": "",
+          "description": "The neighbourhood book exchange brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Jumeirah Library, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "maya",
+            "name": "Maya Chen",
+            "bio": "Making room for music, good food, and new friendships in our city.",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": []
+        }
+      }
+    },
+    {
+      "id": "fe1dbb30-0cd4-5303-813f-0a3001e59cd7",
+      "name": "Get event-6",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-6"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-6",
+          "title": "Jazz under the stars",
+          "category": "Music",
+          "date": "2026-10-06T14:00:00Z",
+          "endDate": "2026-10-06T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Zabeel Park, Dubai",
+          "attendeeCount": 210,
+          "hostId": "maya",
+          "hostName": "Maya Chen",
+          "imageUrl": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80",
+          "description": "Jazz under the stars brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Zabeel Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "maya",
+            "name": "Maya Chen",
+            "bio": "Making room for music, good food, and new friendships in our city.",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "20305bc8-d505-5635-a6fe-639943943c1e",
+      "name": "Get event-7",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "event-7"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "event-7",
+          "title": "Our first community picnic",
+          "category": "Other",
+          "date": "2026-09-20T14:00:00Z",
+          "endDate": "2026-09-20T16:00:00Z",
+          "timeZone": "Asia/Dubai",
+          "location": "Safa Park, Dubai",
+          "attendeeCount": 32,
+          "hostId": "alex",
+          "hostName": "Alex Morgan",
+          "imageUrl": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80",
+          "description": "Our first community picnic brings our community together. Meet your neighbours, share stories, and enjoy a relaxed gathering in Safa Park, Dubai. Everyone is welcome, whether you come with friends or on your own. Arrive a little early to meet your host.",
+          "host": {
+            "id": "alex",
+            "name": "Alex Morgan",
+            "bio": "Runner, maker, and believer in learning something new together.",
+            "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+          },
+          "attendeePreview": [
+            {
+              "id": "sam",
+              "name": "Sam Lee",
+              "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "noor",
+              "name": "Noor Ali",
+              "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+            },
+            {
+              "id": "leo",
+              "name": "Leo Park",
+              "avatarUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&h=120&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a7b62c33-b3e3-5966-95d8-eacd1411e169",
+      "name": "Get host maya",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/hosts/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "maya"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "maya",
+          "name": "Maya Chen",
+          "bio": "Making room for music, good food, and new friendships in our city.",
+          "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80",
+          "events": [
+            {
+              "id": "event-1",
+              "title": "Sunset sessions in the park",
+              "category": "Music",
+              "date": "2026-10-01T14:00:00Z",
+              "endDate": "2026-10-01T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Creek Park, Dubai",
+              "attendeeCount": 48,
+              "hostId": "maya",
+              "hostName": "Maya Chen",
+              "imageUrl": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80"
+            },
+            {
+              "id": "event-4",
+              "title": "Around the table",
+              "category": "Food",
+              "date": "2026-10-04T14:00:00Z",
+              "endDate": "2026-10-04T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Al Fahidi, Dubai",
+              "attendeeCount": 24,
+              "hostId": "maya",
+              "hostName": "Maya Chen",
+              "imageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80"
+            },
+            {
+              "id": "event-5",
+              "title": "The neighbourhood book exchange",
+              "category": "Other",
+              "date": "2026-10-05T14:00:00Z",
+              "endDate": "2026-10-05T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Jumeirah Library, Dubai",
+              "attendeeCount": 0,
+              "hostId": "maya",
+              "hostName": "Maya Chen",
+              "imageUrl": ""
+            },
+            {
+              "id": "event-6",
+              "title": "Jazz under the stars",
+              "category": "Music",
+              "date": "2026-10-06T14:00:00Z",
+              "endDate": "2026-10-06T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Zabeel Park, Dubai",
+              "attendeeCount": 210,
+              "hostId": "maya",
+              "hostName": "Maya Chen",
+              "imageUrl": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8474bc8a-4aa7-5748-8f48-49147aa22ac7",
+      "name": "Get host alex",
+      "priority": 5,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/hosts/{id}",
+        "pathParameters": {
+          "id": {
+            "equalTo": "alex"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "id": "alex",
+          "name": "Alex Morgan",
+          "bio": "Runner, maker, and believer in learning something new together.",
+          "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&h=120&q=80",
+          "events": [
+            {
+              "id": "event-2",
+              "title": "A good morning run",
+              "category": "Sports",
+              "date": "2026-10-02T14:00:00Z",
+              "endDate": "2026-10-02T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Kite Beach, Dubai",
+              "attendeeCount": 16,
+              "hostId": "alex",
+              "hostName": "Alex Morgan",
+              "imageUrl": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80"
+            },
+            {
+              "id": "event-3",
+              "title": "Build something together",
+              "category": "Tech",
+              "date": "2026-10-03T14:00:00Z",
+              "endDate": "2026-10-03T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Alserkal Avenue, Dubai",
+              "attendeeCount": 124,
+              "hostId": "alex",
+              "hostName": "Alex Morgan",
+              "imageUrl": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80"
+            },
+            {
+              "id": "event-7",
+              "title": "Our first community picnic",
+              "category": "Other",
+              "date": "2026-09-20T14:00:00Z",
+              "endDate": "2026-09-20T16:00:00Z",
+              "timeZone": "Asia/Dubai",
+              "location": "Safa Park, Dubai",
+              "attendeeCount": 32,
+              "hostId": "alex",
+              "hostName": "Alex Morgan",
+              "imageUrl": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=900&q=80"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2a1cc34f-b2bc-5cb8-ac8b-241789b7cdf5",
+      "name": "Empty event list",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events",
+        "queryParameters": {
+          "mock": {
+            "equalTo": "empty"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": []
+      }
+    },
+    {
+      "id": "cc6756cd-a662-5d13-a8c5-73e586b1e2cb",
+      "name": "GET /api/events service failure",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events",
+        "queryParameters": {
+          "mock": {
+            "equalTo": "error"
+          }
+        }
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "error": {
+            "code": "SERVICE_UNAVAILABLE",
+            "message": "The service is temporarily unavailable. Please try again."
+          }
+        }
+      }
+    },
+    {
+      "id": "565808f5-f6cc-577e-950f-35eab4ba2141",
+      "name": "GET /api/events/{id} service failure",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}",
+        "pathParameters": {
+          "id": {
+            "matches": "event-[1-7]"
+          }
+        },
+        "queryParameters": {
+          "mock": {
+            "equalTo": "error"
+          }
+        }
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "error": {
+            "code": "SERVICE_UNAVAILABLE",
+            "message": "The service is temporarily unavailable. Please try again."
+          }
+        }
+      }
+    },
+    {
+      "id": "9164fce2-4c22-54a4-a57a-4de5369585cc",
+      "name": "GET /api/events/{id} unknown ID",
+      "priority": 10,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/events/{id}"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "The requested resource was not found."
+          }
+        }
+      }
+    },
+    {
+      "id": "526f2f6d-9064-57bf-836e-0cc34a174065",
+      "name": "GET /api/hosts/{id} service failure",
+      "priority": 1,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/hosts/{id}",
+        "pathParameters": {
+          "id": {
+            "matches": "maya|alex"
+          }
+        },
+        "queryParameters": {
+          "mock": {
+            "equalTo": "error"
+          }
+        }
+      },
+      "response": {
+        "status": 503,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "error": {
+            "code": "SERVICE_UNAVAILABLE",
+            "message": "The service is temporarily unavailable. Please try again."
+          }
+        }
+      }
+    },
+    {
+      "id": "0201c31e-433d-5cd9-810a-c32e5f0e97b0",
+      "name": "GET /api/hosts/{id} unknown ID",
+      "priority": 10,
+      "request": {
+        "method": "GET",
+        "urlPathTemplate": "/api/hosts/{id}"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "fixedDelayMilliseconds": 350,
+        "jsonBody": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "The requested resource was not found."
+          }
+        }
+      }
+    }
+  ]
+}

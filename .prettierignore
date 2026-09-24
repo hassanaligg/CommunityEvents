@@ -1,0 +1,11 @@
+node_modules
+dist
+.expo
+package-lock.json
+plan.md
+assets
+
+test-results/
+playwright-report/
+
+artifacts/
