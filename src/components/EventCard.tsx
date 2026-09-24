@@ -1,65 +1,66 @@
+import { AppText } from '@/components/AppText';
+import { strings } from '@/constants/strings';
+import { layout } from '@/theme/layout';
 import { memo } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { Body, Cover, usePalette } from '@/components/ui';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Cover } from '@/components/Cover';
+import { usePalette, type Palette } from '@/theme/colors';
 import { formatDate } from '@/utils/dates';
 import { CommunityEvent } from '@/types';
+type EventCardProps = {
+  event: CommunityEvent;
+  joined: boolean;
+  onOpen(): void;
+  action: React.ReactNode;
+};
+
 export const EventCard = memo(function EventCard({
   event,
   joined,
   onOpen,
   action,
-}: {
-  event: CommunityEvent;
-  joined: boolean;
-  onOpen(): void;
-  action: React.ReactNode;
-}) {
-  const p = usePalette();
+}: EventCardProps) {
+  const palette = usePalette();
+  const styles = createStyles(palette);
   return (
-    <View
-      style={{
-        padding: 14,
-        gap: 14,
-        backgroundColor: p.surface,
-        borderWidth: 1,
-        borderColor: p.border,
-        borderRadius: 24,
-      }}
-    >
+    <View style={[styles.card, styles.containerColor]}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`View ${event.title}`}
+        accessibilityLabel={strings.event.view(event.title)}
         onPress={onOpen}
-        style={{ gap: 10 }}
+        style={styles.content}
       >
         <Cover uri={event.imageUrl} title={event.title} />
-        <Text
-          style={{
-            color: p.accent,
-            fontSize: 12,
-            fontWeight: '800',
-            letterSpacing: 1,
-          }}
-        >
-          {event.category.toUpperCase()}
-        </Text>
-        <Text
-          style={{
-            fontSize: 22,
-            lineHeight: 28,
-            fontWeight: '700',
-            color: p.text,
-          }}
-        >
-          {event.title}
-        </Text>
-        <Body>{formatDate(event.startsAt, event.timeZone)}</Body>
-        <Body>{event.location}</Body>
+        <AppText variant="category" tone="accent">
+          {strings.categories[event.category].toUpperCase()}
+        </AppText>
+        <AppText variant="cardTitle">{event.title}</AppText>
+        <AppText variant="body" tone="muted">
+          {formatDate(event.startsAt, event.timeZone)}
+        </AppText>
+        <AppText variant="body" tone="muted">
+          {event.location}
+        </AppText>
       </Pressable>
-      <Text style={{ color: p.muted }}>
-        {event.baseAttendeeCount + Number(joined)} attending
-      </Text>
+      <AppText tone="muted">
+        {strings.event.attending(event.baseAttendeeCount + Number(joined))}
+      </AppText>
       {action}
     </View>
   );
 });
+
+const createStyles = (palette: Palette) =>
+  StyleSheet.create({
+    containerColor: {
+      backgroundColor: palette.surface,
+      borderColor: palette.border,
+    },
+    card: {
+      padding: 14,
+      gap: 14,
+      borderWidth: 1,
+      borderRadius: layout.cardRadius,
+    },
+    content: { gap: 10 },
+  });

@@ -1,3 +1,4 @@
+import { strings } from '@/constants/strings';
 import { FetchResult } from '@/types';
 import { useCallback, useEffect, useState } from 'react';
 export function useResource<T>(
@@ -21,7 +22,7 @@ export function useResource<T>(
           setState((s) => ({
             ...s,
             loading: false,
-            error: 'Unable to load this content. Please try again.',
+            error: strings.errors.load,
           }));
       },
     );
@@ -35,8 +36,6 @@ export function useResource<T>(
   return {
     ...state,
     retry,
-    warning: state.usingFallback
-      ? 'Unable to load current data. Showing bundled demo data.'
-      : undefined,
+    warning: state.usingFallback ? strings.errors.fallback : undefined,
   };
 }

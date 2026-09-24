@@ -18,7 +18,10 @@ import {
   rsvpReducer,
 } from '@/store/RsvpContext';
 import { RsvpButton } from '@/components/RsvpButton';
-import { columnsForWidth, isUpcoming } from '@/utils/dates';
+import { SavedDataRecovery } from '@/components/SavedDataRecovery';
+import { strings } from '@/constants/strings';
+import { isUpcoming } from '@/utils/dates';
+import { columnsForWidth } from '@/theme/layout';
 const now = () => Date.parse('2026-09-21T12:00:00Z');
 const event: CommunityEvent = {
   id: 'event-a',
@@ -66,6 +69,65 @@ function CardHarness({ onOpen }: { onOpen: () => void }) {
   );
 }
 describe('RSVP component and actual persistence', () => {
+  it('requires reset confirmation, preserves data on cancel/failure, and restores an empty store after reset', async () => {
+    let raw = 'broken json';
+    let fail = true;
+    const write = jest.fn(async (_key: string, value: string) => {
+      if (fail) throw new Error('quota');
+      raw = value;
+    });
+    const storage = { getItem: async () => raw, setItem: write };
+    function RecoveryHarness() {
+      const state = useRsvps();
+      return (
+        <>
+          <Text>{state.status}</Text>
+          <Text>{state.error}</Text>
+          {state.status === 'error' && <SavedDataRecovery />}
+        </>
+      );
+    }
+    const tree = await render(
+      <RsvpProvider storage={storage} now={now}>
+        <RecoveryHarness />
+      </RsvpProvider>,
+    );
+    await screen.findByText('error');
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.reset }),
+    );
+    expect(write).not.toHaveBeenCalled();
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.resetCancel }),
+    );
+    expect(write).not.toHaveBeenCalled();
+    expect(raw).toBe('broken json');
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.reset }),
+    );
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.resetConfirm }),
+    );
+    await screen.findByText(strings.errors.resetFailed);
+    expect(raw).toBe('broken json');
+    fail = false;
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.reset }),
+    );
+    await fireEvent.press(
+      screen.getByRole('button', { name: strings.errors.resetConfirm }),
+    );
+    await screen.findByText('ready');
+    await tree.unmount();
+    await render(
+      <RsvpProvider storage={storage} now={now}>
+        <CardHarness onOpen={() => {}} />
+      </RsvpProvider>,
+    );
+    await screen.findByText('ready');
+    expect(screen.getByText('No joined events')).toBeTruthy();
+    expect(parseEnvelope(raw).rsvps).toEqual({});
+  });
   it('updates count and selection before the write completes, without navigating', async () => {
     const backing = memory(),
       pending = deferred(),
@@ -197,6 +259,45 @@ describe('RSVP component and actual persistence', () => {
   });
 });
 describe('durable queue and boundaries', () => {
+  it('orders snapshot refreshes with joins and cancellations without restoring cancelled RSVPs', async () => {
+    const storage = memory();
+    const p = new Persistence(storage, now);
+    await p.hydrate();
+    const updated = { ...event, title: 'Updated title', baseAttendeeCount: 20 };
+    const join = p.save(event, true);
+    const sync = p.sync([updated]);
+    await join;
+    expect(await sync).toEqual([updated]);
+    expect(
+      (await new Persistence(storage, now).hydrate()).rsvps[event.id],
+    ).toEqual(updated);
+    const cancel = p.save(event, false);
+    const laterSync = p.sync([updated]);
+    await cancel;
+    expect(await laterSync).toEqual([]);
+    expect((await new Persistence(storage, now).hydrate()).rsvps).toEqual({});
+  });
+  it('restores refreshed details if an overlapping optimistic cancellation fails', () => {
+    const pending = rsvpReducer(
+      { ...initialState, status: 'ready', joined: { [event.id]: event } },
+      {
+        type: 'request',
+        event,
+        joined: false,
+        request: 1,
+      },
+    );
+    const updated = { ...event, title: 'Updated title' };
+    const refreshed = rsvpReducer(pending, { type: 'sync', events: [updated] });
+    expect(refreshed.joined).toEqual({});
+    const rolledBack = rsvpReducer(refreshed, {
+      type: 'settle',
+      id: event.id,
+      request: 1,
+      error: 'quota',
+    });
+    expect(rolledBack.joined[event.id]).toEqual(updated);
+  });
   it('does not persist a failed event when a second queued event succeeds', async () => {
     const storage = memory();
     let writes = 0;

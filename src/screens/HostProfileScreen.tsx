@@ -1,26 +1,33 @@
+import { AppText } from '@/components/AppText';
+import { strings } from '@/constants/strings';
 import { DataNotice } from '@/components/DataNotice';
 import { EventGrid } from '@/components/EventGrid';
-import { Avatar, Body, Page, StateView, Title } from '@/components/ui';
-import { useResource } from '@/hooks/useResource';
+import { Avatar } from '@/components/Avatar';
+import { Page } from '@/components/Page';
+import { StateView } from '@/components/StateView';
+import { useEventResource, hostEvents } from '@/hooks/useEventResource';
 import { fetchHostProfile } from '@/services/api';
 import { useCallback } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-export function HostProfileScreen({ id }: { id: string }) {
-  const resource = useResource(
+type HostProfileScreenProps = { id: string };
+
+export function HostProfileScreen({ id }: HostProfileScreenProps) {
+  const resource = useEventResource(
     useCallback((signal: AbortSignal) => fetchHostProfile(id, signal), [id]),
+    hostEvents,
   );
   if (resource.loading && !resource.data)
     return (
       <Page>
-        <StateView title="Loading host…" loading />
+        <StateView title={strings.host.loading} loading />
       </Page>
     );
   if (resource.error)
     return (
       <Page>
         <StateView
-          title="Host unavailable"
+          title={strings.host.unavailable}
           message={resource.error}
           retry={resource.retry}
         />
@@ -34,8 +41,8 @@ export function HostProfileScreen({ id }: { id: string }) {
           <DataNotice retry={resource.retry} loading={resource.loading} />
         )}
         <StateView
-          title="Host not found"
-          message="This profile is unavailable."
+          title={strings.host.notFound}
+          message={strings.host.notFoundMessage}
         />
       </Page>
     );
@@ -44,18 +51,26 @@ export function HostProfileScreen({ id }: { id: string }) {
       <EventGrid
         events={host.events}
         header={
-          <View style={{ gap: 16, paddingBottom: 20 }}>
+          <View style={styles.header}>
             {resource.warning && (
               <DataNotice retry={resource.retry} loading={resource.loading} />
             )}
             <Avatar name={host.name} uri={host.avatarUrl} />
-            <Title>{host.name}</Title>
-            <Body>{host.bio}</Body>
-            <Title>Hosted gatherings</Title>
+            <AppText variant="title" accessibilityRole="header">
+              {host.name}
+            </AppText>
+            <AppText variant="body" tone="muted">
+              {host.bio}
+            </AppText>
+            <AppText variant="title" accessibilityRole="header">
+              {strings.host.events}
+            </AppText>
           </View>
         }
-        empty="No hosted events"
+        empty={strings.host.empty}
       />
     </Page>
   );
 }
+
+const styles = StyleSheet.create({ header: { gap: 16, paddingBottom: 20 } });

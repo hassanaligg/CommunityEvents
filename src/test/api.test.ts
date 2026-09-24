@@ -4,6 +4,7 @@ import {
   fetchEvents,
   fetchEventDetails,
   fetchHostProfile,
+  REQUEST_TIMEOUT_MS,
 } from '@/services/api';
 import { parseDetail, parseEvents, parseHost } from '@/utils/validation';
 
@@ -17,9 +18,49 @@ const host = {
 };
 afterEach(() => {
   jest.restoreAllMocks();
+  jest.useRealTimers();
 });
 
 describe('fetch functions', () => {
+  it('times out stalled requests, aborts transport and allows a successful retry', async () => {
+    jest.useFakeTimers();
+    const fetchMock = jest
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(() => new Promise<Response>(() => {}));
+    const pending = fetchEvents();
+    await jest.advanceTimersByTimeAsync(REQUEST_TIMEOUT_MS);
+    expect((await pending).usingFallback).toBe(true);
+    expect(fetchMock.mock.calls[0]?.[1]?.signal?.aborted).toBe(true);
+    fetchMock.mockResolvedValueOnce(response(catalog));
+    expect((await fetchEvents()).usingFallback).toBe(false);
+    expect(jest.getTimerCount()).toBe(0);
+  });
+  it('times out a stalled response body and reports an unavailable resource without a sample', async () => {
+    jest.useFakeTimers();
+    const stalled = response({});
+    jest.spyOn(stalled, 'json').mockImplementation(() => new Promise(() => {}));
+    jest.spyOn(globalThis, 'fetch').mockResolvedValue(stalled);
+    const pending = expect(fetchEventDetails('new-event')).rejects.toThrow(
+      'Event unavailable',
+    );
+    await jest.advanceTimersByTimeAsync(REQUEST_TIMEOUT_MS);
+    await pending;
+    expect(jest.getTimerCount()).toBe(0);
+  });
+  it('cleans up the timeout when the caller cancels a stalled request', async () => {
+    jest.useFakeTimers();
+    const fetchMock = jest
+      .spyOn(globalThis, 'fetch')
+      .mockImplementation(() => new Promise<Response>(() => {}));
+    const controller = new AbortController();
+    const pending = expect(fetchEvents(controller.signal)).rejects.toThrow(
+      'Request cancelled',
+    );
+    controller.abort();
+    await pending;
+    expect(fetchMock.mock.calls[0]?.[1]?.signal?.aborted).toBe(true);
+    expect(jest.getTimerCount()).toBe(0);
+  });
   it('loads and validates the three endpoints', async () => {
     const fetchMock = jest
       .spyOn(globalThis, 'fetch')

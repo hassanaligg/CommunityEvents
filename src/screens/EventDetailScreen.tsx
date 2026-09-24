@@ -1,49 +1,52 @@
+import { AppText } from '@/components/AppText';
+import { strings } from '@/constants/strings';
 import { DataNotice } from '@/components/DataNotice';
 import { router } from 'expo-router';
 import { useCallback } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { fetchEventDetails } from '@/services/api';
 import { currentUser } from '@/types';
-import { useResource } from '@/hooks/useResource';
+import { useEventResource, detailEvents } from '@/hooks/useEventResource';
 import { useRsvps } from '@/store/RsvpContext';
 import { RsvpButton } from '@/components/RsvpButton';
-import {
-  Avatar,
-  Body,
-  Button,
-  Cover,
-  Page,
-  StateView,
-  Title,
-  usePalette,
-} from '@/components/ui';
+import { Avatar } from '@/components/Avatar';
+import { Button } from '@/components/Button';
+import { Cover } from '@/components/Cover';
+import { Page } from '@/components/Page';
+import { StateView } from '@/components/StateView';
 import { formatDate } from '@/utils/dates';
 
-export function EventDetailScreen({ id }: { id: string }) {
-  const state = useRsvps(),
-    p = usePalette();
-  const resource = useResource(
+type EventDetailScreenProps = { id: string };
+
+export function EventDetailScreen({ id }: EventDetailScreenProps) {
+  const state = useRsvps();
+  const resource = useEventResource(
     useCallback((signal: AbortSignal) => fetchEventDetails(id, signal), [id]),
+    detailEvents,
   );
   const event = resource.data;
   if (resource.loading && !event)
     return (
       <Page>
-        <StateView title="Loading event…" loading />
+        <StateView title={strings.event.loading} loading />
       </Page>
     );
   if (resource.error && !event)
     return (
       <Page>
         <StateView
-          title="Event unavailable"
+          title={strings.event.unavailable}
           message={resource.error}
           retry={resource.retry}
         />
         {state.joined[id] && (
           <>
-            <Title>{state.joined[id].title}</Title>
-            <Body>Saved RSVP. Full details are unavailable right now.</Body>
+            <AppText variant="title" accessibilityRole="header">
+              {state.joined[id].title}
+            </AppText>
+            <AppText variant="body" tone="muted">
+              {strings.event.savedDetails}
+            </AppText>
             <RsvpButton event={state.joined[id]} />
           </>
         )}
@@ -56,10 +59,13 @@ export function EventDetailScreen({ id }: { id: string }) {
           <DataNotice retry={resource.retry} loading={resource.loading} />
         )}
         <StateView
-          title="Event not found"
-          message="This event does not exist. Explore other gatherings instead."
+          title={strings.event.notFound}
+          message={strings.event.notFoundMessage}
         />
-        <Button label="Discover events" onPress={() => router.replace('/')} />
+        <Button
+          label={strings.common.discoverEvents}
+          onPress={() => router.replace('/')}
+        />
       </Page>
     );
   const preview = [
@@ -71,7 +77,7 @@ export function EventDetailScreen({ id }: { id: string }) {
     <Page>
       {resource.error && (
         <StateView
-          title="Showing saved event"
+          title={strings.event.saved}
           message={resource.error}
           retry={resource.retry}
         />
@@ -80,35 +86,55 @@ export function EventDetailScreen({ id }: { id: string }) {
         <DataNotice retry={resource.retry} loading={resource.loading} />
       )}
       <Cover uri={event.imageUrl} title={event.title} />
-      <Text style={{ color: p.accent, fontWeight: '700' }}>
-        {event.category}
-      </Text>
-      <Title>{event.title}</Title>
-      <Body>{formatDate(event.startsAt, event.timeZone)}</Body>
-      <Body>{event.location}</Body>
+      <AppText variant="strong" tone="accent">
+        {strings.categories[event.category]}
+      </AppText>
+      <AppText variant="title" accessibilityRole="header">
+        {event.title}
+      </AppText>
+      <AppText variant="body" tone="muted">
+        {formatDate(event.startsAt, event.timeZone)}
+      </AppText>
+      <AppText variant="body" tone="muted">
+        {event.location}
+      </AppText>
       <RsvpButton event={event} />
-      <Title>About this gathering</Title>
-      <Body>{event.description}</Body>
+      <AppText variant="title" accessibilityRole="header">
+        {strings.event.about}
+      </AppText>
+      <AppText variant="body" tone="muted">
+        {event.description}
+      </AppText>
       <Avatar name={event.host.name} uri={event.host.avatarUrl} />
-      <Title>Hosted by {event.host.name}</Title>
-      <Body>{event.host.bio}</Body>
+      <AppText variant="title" accessibilityRole="header">
+        {strings.event.hostedBy(event.host.name)}
+      </AppText>
+      <AppText variant="body" tone="muted">
+        {event.host.bio}
+      </AppText>
       <Button
-        label="Meet your host"
+        label={strings.event.meetHost}
         onPress={() =>
           router.push({ pathname: '/host/[id]', params: { id: event.hostId } })
         }
       />
-      <Title>{count} attending</Title>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+      <AppText variant="title" accessibilityRole="header">
+        {strings.event.attending(count)}
+      </AppText>
+      <View style={styles.attendees}>
         {preview.map((a) => (
           <Avatar key={a.id} name={a.name} uri={a.avatarUrl} />
         ))}
       </View>
-      <Body>
+      <AppText variant="body" tone="muted">
         {count === 0
-          ? 'Be the first to join.'
-          : `Attendee preview${count > preview.length ? ` · and ${count - preview.length} others` : ''}`}
-      </Body>
+          ? strings.event.firstAttendee
+          : strings.event.attendeePreview(count - preview.length)}
+      </AppText>
     </Page>
   );
 }
+
+const styles = StyleSheet.create({
+  attendees: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+});

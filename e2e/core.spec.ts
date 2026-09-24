@@ -1,6 +1,26 @@
 import { expect, test, type Page } from '@playwright/test';
 import catalog from '../src/data/events.json';
 const textWarnings = new WeakMap<Page, string[]>();
+
+async function waitForImages(page: Page) {
+  await expect(page.locator('img').first()).toBeAttached();
+  await expect
+    .poll(
+      () =>
+        page
+          .locator('img')
+          .evaluateAll((images) =>
+            images.every(
+              (image) =>
+                image instanceof HTMLImageElement &&
+                image.complete &&
+                image.naturalWidth > 0,
+            ),
+          ),
+      { timeout: 15000 },
+    )
+    .toBe(true);
+}
 test.beforeEach(async ({ page }) => {
   const warnings: string[] = [];
   textWarnings.set(page, warnings);
@@ -33,6 +53,7 @@ test('four screens, responsive breakpoint, direct links and durable RSVP', async
       exact: true,
     }),
   ).toHaveCount(0);
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/discover.png',
     fullPage: true,
@@ -66,6 +87,7 @@ test('four screens, responsive breakpoint, direct links and durable RSVP', async
   await expect(
     page.getByRole('heading', { name: '49 attending', exact: true }),
   ).toBeVisible();
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/event-detail.png',
     fullPage: true,
@@ -81,12 +103,14 @@ test('four screens, responsive breakpoint, direct links and durable RSVP', async
       exact: true,
     }),
   ).toHaveCount(0);
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/host-profile.png',
     fullPage: true,
   });
   await page.goto('/my-events');
   await expect(first).toBeVisible();
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/my-events.png',
     fullPage: true,
@@ -249,6 +273,7 @@ test('short landscape screens can scroll to events and RSVP controls', async ({
   await expect(
     page.getByRole('button', { name: '✓ Going · Cancel RSVP', exact: true }),
   ).toBeEnabled();
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/discover-landscape.png',
   });
@@ -259,9 +284,115 @@ test('short landscape screens can scroll to events and RSVP controls', async ({
   });
   await cancel.scrollIntoViewIfNeeded();
   await expect(cancel).toBeInViewport();
+  await waitForImages(page);
   await page.screenshot({
     path: 'docs/screenshots/web/my-events-landscape.png',
   });
   await cancel.click();
+  await expect(page.getByText('No upcoming RSVPs')).toBeVisible();
+});
+
+test('saved-event refresh updates dates and counts, persists, and preserves data offline', async ({
+  page,
+}) => {
+  let updated = false;
+  let offline = false;
+  const revised = {
+    ...catalog[0]!,
+    title: 'Rescheduled sunset session',
+    date: '2026-09-20T14:00:00Z',
+    endDate: '2026-09-20T16:00:00Z',
+    attendeeCount: 60,
+  };
+  await page.route('https://dgm45.wiremockapi.cloud/**', (route) => {
+    if (offline) return route.abort('failed');
+    return route.fulfill({
+      json:
+        new URL(route.request().url()).pathname === '/api/events'
+          ? updated
+            ? [revised]
+            : catalog
+          : catalog[0],
+    });
+  });
+  await page.goto('/event/event-1');
+  await page.getByRole('button', { name: '+ RSVP', exact: true }).click();
+  await expect(
+    page.getByRole('button', { name: '✓ Going · Cancel RSVP', exact: true }),
+  ).toBeEnabled();
+  await page.goto('/my-events');
+  await expect(
+    page.getByText(catalog[0]!.title, { exact: true }),
+  ).toBeVisible();
+  updated = true;
+  await page
+    .getByRole('button', { name: 'Refresh saved events', exact: true })
+    .click();
+  await expect(page.getByText('No upcoming RSVPs')).toBeVisible();
+  await page.getByRole('button', { name: 'Past', exact: true }).click();
+  await expect(page.getByText(revised.title, { exact: true })).toBeVisible();
+  await expect(page.getByText('61 attending', { exact: true })).toBeVisible();
+  await page.reload();
+  await page.getByRole('button', { name: 'Past', exact: true }).click();
+  await expect(page.getByText(revised.title, { exact: true })).toBeVisible();
+  await waitForImages(page);
+  await page.screenshot({
+    path: 'docs/screenshots/web/my-events-refresh-past.png',
+    fullPage: true,
+  });
+  offline = true;
+  await page
+    .getByRole('button', { name: 'Refresh saved events', exact: true })
+    .click();
+  await expect(page.getByRole('alert')).toContainText(
+    'Could not refresh events',
+  );
+  await expect(page.getByText(revised.title, { exact: true })).toBeVisible();
+  await waitForImages(page);
+  await page.screenshot({
+    path: 'docs/screenshots/web/my-events-refresh-offline.png',
+    fullPage: true,
+  });
+});
+
+test('corrupt saved data requires confirmation before resetting', async ({
+  page,
+}) => {
+  await page.route('https://dgm45.wiremockapi.cloud/**', (route) =>
+    route.fulfill({ json: catalog }),
+  );
+  await page.goto('/');
+  await expect(page.getByText('Find your people.')).toBeVisible();
+  await page.evaluate(() =>
+    localStorage.setItem('community-events:state:v1', 'broken json'),
+  );
+  await page.reload();
+  await expect(page.getByText('Saved events unavailable')).toBeVisible();
+  await page
+    .getByRole('button', { name: 'Reset saved RSVPs', exact: true })
+    .click();
+  await page.screenshot({
+    path: 'docs/screenshots/web/saved-data-recovery.png',
+    fullPage: true,
+  });
+  await page
+    .getByRole('button', { name: 'Keep saved RSVPs', exact: true })
+    .click();
+  expect(
+    await page.evaluate(() =>
+      localStorage.getItem('community-events:state:v1'),
+    ),
+  ).toBe('broken json');
+  await page
+    .getByRole('button', { name: 'Reset saved RSVPs', exact: true })
+    .click();
+  await page
+    .getByRole('button', {
+      name: 'Remove saved RSVPs and continue',
+      exact: true,
+    })
+    .click();
+  await expect(page.getByText('Find your people.')).toBeVisible();
+  await page.goto('/my-events');
   await expect(page.getByText('No upcoming RSVPs')).toBeVisible();
 });

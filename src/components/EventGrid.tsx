@@ -1,51 +1,54 @@
 import { RsvpButton } from '@/components/RsvpButton';
-import { StateView } from '@/components/ui';
+import { StateView } from '@/components/StateView';
+import { strings } from '@/constants/strings';
 import { useRsvps } from '@/store/RsvpContext';
+import { columnsForWidth, layout } from '@/theme/layout';
 import { CommunityEvent } from '@/types';
-import { columnsForWidth } from '@/utils/dates';
 import { router } from 'expo-router';
 import { ReactElement } from 'react';
-import { FlatList, useWindowDimensions, View } from 'react-native';
+import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { EventCard } from './EventCard';
-export function EventGrid({
-  events,
-  header,
-  footer,
-  empty = 'No events yet',
-  refreshing = false,
-  onRefresh,
-}: {
+type EventGridProps = {
   events: CommunityEvent[];
   header?: ReactElement;
   footer?: ReactElement;
   empty?: string;
   refreshing?: boolean;
   onRefresh?: () => void;
-}) {
-  const { width } = useWindowDimensions(),
-    state = useRsvps(),
-    columns = columnsForWidth(width);
+};
+
+export function EventGrid({
+  events,
+  header,
+  footer,
+  empty = strings.grid.empty,
+  refreshing = false,
+  onRefresh,
+}: EventGridProps) {
+  const { width } = useWindowDimensions();
+  const state = useRsvps();
+  const columns = columnsForWidth(width);
   return (
     <FlatList
-      style={{ flex: 1 }}
+      style={styles.list}
       key={columns}
       numColumns={columns}
       data={events}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(e) => e.id}
-      contentContainerStyle={{ gap: 18, paddingBottom: 24 }}
-      columnWrapperStyle={columns === 2 ? { gap: 18 } : undefined}
+      contentContainerStyle={styles.content}
+      columnWrapperStyle={columns === 2 ? styles.row : undefined}
       ListHeaderComponent={header}
       ListFooterComponent={footer}
       ListEmptyComponent={
-        <StateView
-          title={empty}
-          message="Try another category or discover something new to join."
-        />
+        <StateView title={empty} message={strings.grid.emptyMessage} />
       }
       refreshing={refreshing}
       onRefresh={onRefresh}
       renderItem={({ item }) => (
-        <View style={{ width: columns === 2 ? '48.5%' : '100%' }}>
+        <View
+          style={columns === 2 ? styles.twoColumnItem : styles.oneColumnItem}
+        >
           <EventCard
             event={item}
             joined={!!state.joined[item.id]}
@@ -59,3 +62,11 @@ export function EventGrid({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  twoColumnItem: { width: '48.5%' },
+  oneColumnItem: { width: '100%' },
+  list: { flex: 1 },
+  content: { gap: layout.gridGap, paddingBottom: 24 },
+  row: { gap: layout.gridGap },
+});

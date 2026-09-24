@@ -1,13 +1,19 @@
+import { strings } from '@/constants/strings';
 import { router } from 'expo-router';
-import { Button, Page, StateView } from '@/components/ui';
+import { Button } from '@/components/Button';
+import { Page } from '@/components/Page';
+import { StateView } from '@/components/StateView';
 export default function NotFound() {
   return (
     <Page>
       <StateView
-        title="This page wandered off."
-        message="There are still plenty of people to meet."
+        title={strings.errors.pageNotFound}
+        message={strings.errors.pageNotFoundMessage}
       />
-      <Button label="Discover events" onPress={() => router.replace('/')} />
+      <Button
+        label={strings.common.discoverEvents}
+        onPress={() => router.replace('/')}
+      />
     </Page>
   );
 }

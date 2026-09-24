@@ -10,6 +10,7 @@ import {
 const API_URL = (
   process.env.EXPO_PUBLIC_API_URL || 'https://dgm45.wiremockapi.cloud'
 ).replace(/\/+$/, '');
+export const REQUEST_TIMEOUT_MS = 15_000;
 
 // Shared HTTP checks; each function below owns its validation and fallback.
 async function fetchJson(
@@ -18,15 +19,38 @@ async function fetchJson(
   allowMissing = false,
 ): Promise<unknown> {
   if (signal?.aborted) throw new Error('Request cancelled.');
-  const response = await fetch(`${API_URL}${path}`, {
-    signal,
-    headers: { Accept: 'application/json' },
+  const controller = new AbortController();
+  let rejectRequest!: (error: Error) => void;
+  const interrupted = new Promise<never>((_, reject) => {
+    rejectRequest = reject;
   });
-  if (response.status === 404 && allowMissing) return undefined;
-  if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-  const data: unknown = await response.json();
-  if (signal?.aborted) throw new Error('Request cancelled.');
-  return data;
+  const cancel = () => {
+    rejectRequest(new Error('Request cancelled.'));
+    controller.abort();
+  };
+  signal?.addEventListener('abort', cancel);
+  const timer = setTimeout(() => {
+    rejectRequest(new Error('Request timed out.'));
+    controller.abort();
+  }, REQUEST_TIMEOUT_MS);
+  try {
+    return await Promise.race([
+      (async () => {
+        const response = await fetch(`${API_URL}${path}`, {
+          signal: controller.signal,
+          headers: { Accept: 'application/json' },
+        });
+        if (response.status === 404 && allowMissing) return undefined;
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        const data: unknown = await response.json();
+        return data;
+      })(),
+      interrupted,
+    ]);
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener('abort', cancel);
+  }
 }
 
 export async function fetchEvents(

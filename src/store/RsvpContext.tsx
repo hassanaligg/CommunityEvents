@@ -1,3 +1,4 @@
+import { strings } from '@/constants/strings';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,
@@ -19,6 +20,7 @@ export type RsvpState = {
   pending: Record<string, Pending>;
   errors: Record<string, string>;
   error?: string;
+  syncError?: string;
 };
 export const initialState: RsvpState = {
   status: 'loading',
@@ -30,10 +32,25 @@ type Action =
   | { type: 'hydrate'; envelope: Envelope }
   | { type: 'error'; message: string }
   | { type: 'loading' }
+  | { type: 'sync'; events: readonly CommunityEvent[] }
+  | { type: 'syncError' }
   | { type: 'request'; event: CommunityEvent; joined: boolean; request: number }
   | { type: 'settle'; id: string; request: number; error?: string };
 export function rsvpReducer(state: RsvpState, action: Action): RsvpState {
   switch (action.type) {
+    case 'sync': {
+      const joined = { ...state.joined },
+        pending = { ...state.pending };
+      for (const event of action.events) {
+        if (joined[event.id]) joined[event.id] = event;
+        const operation = pending[event.id];
+        if (operation?.previous)
+          pending[event.id] = { ...operation, previous: event };
+      }
+      return { ...state, joined, pending, syncError: undefined };
+    }
+    case 'syncError':
+      return { ...state, syncError: strings.errors.syncSaved };
     case 'loading':
       return { ...state, status: 'loading', error: undefined };
     case 'hydrate':
@@ -83,6 +100,8 @@ const StateContext = createContext<RsvpState | null>(null);
 const ActionsContext = createContext<{
   toggle(event: CommunityEvent): Promise<void>;
   retry(): void;
+  reset(): void;
+  sync(events: readonly CommunityEvent[]): Promise<void>;
 } | null>(null);
 export function RsvpProvider({
   children,
@@ -105,24 +124,28 @@ export function RsvpProvider({
   const guards = useRef(new Set<string>()),
     sequence = useRef(0),
     generation = useRef(0);
-  const hydrate = useCallback(() => {
-    const token = ++generation.current;
-    dispatch({ type: 'loading' });
-    void persistence.hydrate().then(
-      (envelope) => {
-        if (generation.current === token)
-          dispatch({ type: 'hydrate', envelope });
-      },
-      () => {
-        if (generation.current === token)
-          dispatch({
-            type: 'error',
-            message:
-              'Could not restore saved events. Your data has been preserved. Check available storage and try again.',
-          });
-      },
-    );
-  }, [persistence]);
+  const hydrate = useCallback(
+    (reset = false) => {
+      const token = ++generation.current;
+      dispatch({ type: 'loading' });
+      void (reset ? persistence.reset() : persistence.hydrate()).then(
+        (envelope) => {
+          if (generation.current === token)
+            dispatch({ type: 'hydrate', envelope });
+        },
+        () => {
+          if (generation.current === token)
+            dispatch({
+              type: 'error',
+              message: reset
+                ? strings.errors.resetFailed
+                : strings.errors.restore,
+            });
+        },
+      );
+    },
+    [persistence],
+  );
   const invalidate = useCallback(() => {
     generation.current++;
   }, []);
@@ -149,7 +172,7 @@ export function RsvpProvider({
             type: 'settle',
             id: event.id,
             request,
-            error: 'Your RSVP could not be saved. Please try again.',
+            error: strings.errors.save,
           });
       } finally {
         guards.current.delete(event.id);
@@ -157,9 +180,30 @@ export function RsvpProvider({
     },
     [persistence],
   );
+  const sync = useCallback(
+    async (events: readonly CommunityEvent[]) => {
+      if (stateRef.current.status !== 'ready') return;
+      const token = generation.current;
+      try {
+        const updates = await persistence.sync(events);
+        if (generation.current === token)
+          dispatch({ type: 'sync', events: updates });
+      } catch {
+        if (generation.current === token) dispatch({ type: 'syncError' });
+      }
+    },
+    [persistence],
+  );
   const actions = useMemo(
-    () => ({ toggle, retry: hydrate }),
-    [toggle, hydrate],
+    () => ({
+      toggle,
+      sync,
+      retry: () => hydrate(),
+      reset: () => {
+        if (stateRef.current.status === 'error') hydrate(true);
+      },
+    }),
+    [toggle, hydrate, sync],
   );
   return (
     <ActionsContext.Provider value={actions}>

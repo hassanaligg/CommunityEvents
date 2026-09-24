@@ -1,73 +1,87 @@
+import { strings } from '@/constants/strings';
 import { AppBar } from '@/components/AppBar';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ReactNode } from 'react';
 import { RsvpProvider, useRsvps, useRsvpActions } from '@/store/RsvpContext';
-import { Button, Page, StateView, usePalette } from '@/components/ui';
-export function ErrorBoundary({ retry }: { retry: () => void }) {
+import { Button } from '@/components/Button';
+import { Page } from '@/components/Page';
+import { StateView } from '@/components/StateView';
+import { SavedDataRecovery } from '@/components/SavedDataRecovery';
+import { usePalette, type Palette } from '@/theme/colors';
+type ErrorBoundaryProps = { retry: () => void };
+
+type HydrationGateProps = { children: ReactNode };
+
+export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
   return (
     <Page>
       <StateView
-        title="Something went wrong"
-        message="Please try opening this screen again."
+        title={strings.errors.unexpected}
+        message={strings.errors.reopen}
       />
-      <Button label="Try again" onPress={retry} />
+      <Button label={strings.common.tryAgain} onPress={retry} />
     </Page>
   );
 }
-function HydrationGate({ children }: { children: ReactNode }) {
+function HydrationGate({ children }: HydrationGateProps) {
   const state = useRsvps(),
     actions = useRsvpActions();
   if (state.status !== 'ready')
     return (
       <>
-        <AppBar title="Community events" />
+        <AppBar title={strings.navigation.community} />
         <Page>
           <StateView
             title={
               state.status === 'loading'
-                ? 'Getting things ready…'
-                : 'Saved events unavailable'
+                ? strings.errors.preparing
+                : strings.errors.savedUnavailable
             }
             loading={state.status === 'loading'}
             message={state.error}
             retry={state.status === 'error' ? actions.retry : undefined}
           />
+          {state.status === 'error' && <SavedDataRecovery />}
         </Page>
       </>
     );
   return children;
 }
 export default function RootLayout() {
-  const p = usePalette();
+  const palette = usePalette();
+  const styles = createStyles(palette);
   return (
     <RsvpProvider>
-      <View style={{ flex: 1, backgroundColor: p.appBar }}>
+      <View style={styles.container}>
         {/* Keep status-bar control here; native Stack overrides conflict with iOS Expo Go. */}
         <StatusBar style="light" hidden={false} />
         <HydrationGate>
           <Stack
             screenOptions={{
               header: ({ options }) => (
-                <AppBar title={options.title ?? 'Community events'} showBack />
+                <AppBar
+                  title={options.title ?? strings.navigation.community}
+                  showBack
+                />
               ),
-              contentStyle: { backgroundColor: p.background },
+              contentStyle: styles.screen,
               headerShadowVisible: false,
             }}
           >
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
               name="event/[id]"
-              options={{ title: 'Event details' }}
+              options={{ title: strings.navigation.details }}
             />
             <Stack.Screen
               name="host/[id]"
-              options={{ title: 'Host profile' }}
+              options={{ title: strings.navigation.host }}
             />
             <Stack.Screen
               name="+not-found"
-              options={{ title: 'Page not found' }}
+              options={{ title: strings.navigation.notFound }}
             />
           </Stack>
         </HydrationGate>
@@ -75,3 +89,9 @@ export default function RootLayout() {
     </RsvpProvider>
   );
 }
+
+const createStyles = (palette: Palette) =>
+  StyleSheet.create({
+    container: { flex: 1, backgroundColor: palette.appBar },
+    screen: { backgroundColor: palette.background },
+  });

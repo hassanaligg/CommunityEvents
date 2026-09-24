@@ -7,7 +7,7 @@ export function useClock() {
   useFocusEffect(
     useCallback(() => {
       setNow(Date.now());
-      const timer = setInterval(() => setNow(Date.now()), 1000);
+      const timer = setInterval(() => setNow(Date.now()), 60_000);
       return () => clearInterval(timer);
     }, []),
   );

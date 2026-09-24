@@ -1,36 +1,63 @@
+import { strings } from '@/constants/strings';
 import { AppBar } from '@/components/AppBar';
-import { usePalette } from '@/components/ui';
+import { AppText } from '@/components/AppText';
+import { usePalette, type Palette } from '@/theme/colors';
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 export default function TabsLayout() {
-  const p = usePalette();
+  const palette = usePalette();
+  const styles = createStyles(palette);
   return (
     <Tabs
       screenOptions={{
-        header: ({ options }) => <AppBar title={options.title ?? 'Discover'} />,
-        tabBarActiveTintColor: p.accent,
-        tabBarInactiveTintColor: p.muted,
-        tabBarStyle: { backgroundColor: p.surface, borderTopColor: p.border },
+        header: ({ options }) => (
+          <AppBar title={options.title ?? strings.navigation.discover} />
+        ),
+        tabBarActiveTintColor: palette.accent,
+        tabBarInactiveTintColor: palette.muted,
+        tabBarStyle: styles.container,
+        tabBarLabel: ({ children, color, position }) => (
+          <AppText
+            variant={position === 'beside-icon' ? 'tabLabelBeside' : 'tabLabel'}
+            numberOfLines={1}
+            style={[
+              position === 'beside-icon' && styles.labelBeside,
+              { color },
+            ]}
+          >
+            {children}
+          </AppText>
+        ),
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Discover',
+          title: strings.navigation.discover,
           tabBarIcon: ({ color }) => (
-            <Text style={{ color, fontSize: 22 }}>◎</Text>
+            <Text style={[styles.tabIcon, { color }]}>◎</Text>
           ),
         }}
       />
       <Tabs.Screen
         name="my-events"
         options={{
-          title: 'My Events',
+          title: strings.navigation.myEvents,
           tabBarIcon: ({ color }) => (
-            <Text style={{ color, fontSize: 22 }}>♡</Text>
+            <Text style={[styles.tabIcon, { color }]}>♡</Text>
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const createStyles = (palette: Palette) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: palette.surface,
+      borderTopColor: palette.border,
+    },
+    tabIcon: { fontSize: 22 },
+    labelBeside: { marginStart: 5, marginEnd: 12 },
+  });

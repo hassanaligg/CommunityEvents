@@ -1,3 +1,4 @@
+import { strings } from '@/constants/strings';
 export const categories = ['Music', 'Sports', 'Tech', 'Food', 'Other'] as const;
 export type Category = (typeof categories)[number];
 // The list and RSVP snapshots contain summaries; details are loaded independently.
@@ -26,7 +27,7 @@ export type EventDetail = CommunityEvent &
     attendeePreview: readonly Person[];
   }>;
 export type HostProfile = Host & Readonly<{ events: CommunityEvent[] }>;
-export const currentUser: Person = { id: 'me', name: 'You' };
+export const currentUser: Person = { id: 'me', name: strings.common.you };
 export type FetchResult<T> = {
   data: T;
   usingFallback: boolean;

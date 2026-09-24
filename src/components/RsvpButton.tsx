@@ -1,24 +1,27 @@
-import { View, Text } from 'react-native';
+import { AppText } from '@/components/AppText';
+import { strings } from '@/constants/strings';
+import { StyleSheet, View } from 'react-native';
 import { CommunityEvent } from '@/types';
-import { Button, usePalette } from '@/components/ui';
+import { Button } from '@/components/Button';
 import { useRsvpActions, useRsvps } from '@/store/RsvpContext';
-export function RsvpButton({ event }: { event: CommunityEvent }) {
+type RsvpButtonProps = { event: CommunityEvent };
+
+export function RsvpButton({ event }: RsvpButtonProps) {
   const state = useRsvps(),
-    actions = useRsvpActions(),
-    p = usePalette();
+    actions = useRsvpActions();
   const selected = !!state.joined[event.id],
     pending = !!state.pending[event.id];
   return (
-    <View style={{ gap: 8 }}>
+    <View style={styles.container}>
       <Button
         label={
           pending
             ? selected
-              ? '✓ Going · Saving…'
-              : '+ RSVP · Saving…'
+              ? strings.rsvp.savingJoined
+              : strings.rsvp.savingJoin
             : selected
-              ? '✓ Going · Cancel RSVP'
-              : '+ RSVP'
+              ? strings.rsvp.cancel
+              : strings.rsvp.join
         }
         selected={selected}
         disabled={pending || state.status !== 'ready'}
@@ -28,11 +31,11 @@ export function RsvpButton({ event }: { event: CommunityEvent }) {
       />
       {state.errors[event.id] && (
         <>
-          <Text accessibilityRole="alert" style={{ color: p.error }}>
+          <AppText accessibilityRole="alert" tone="error">
             {state.errors[event.id]}
-          </Text>
+          </AppText>
           <Button
-            label="Retry RSVP"
+            label={strings.rsvp.retry}
             onPress={() => {
               void actions.toggle(event);
             }}
@@ -42,3 +45,7 @@ export function RsvpButton({ event }: { event: CommunityEvent }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { gap: 8 },
+});
